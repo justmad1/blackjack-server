@@ -2,12 +2,27 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 interface IUser extends Document {
     username: string;
-    moneyBalance: number;
+    password: string;
+    status: 'admin' | 'user';
 }
 
-const userSchema: Schema = new Schema({
-    username: { type: String, required: true, unique: true },
-    moneyBalance: { type: Number, default: 1000 }
+const userSchema = new Schema<IUser>({
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        enum: ['admin', 'user'],
+        default: 'user',
+    },
 });
 
-export default mongoose.model<IUser>('User', userSchema);
+const User = mongoose.model<IUser>('User', userSchema);
+
+export default User;

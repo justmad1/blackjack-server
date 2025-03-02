@@ -10,7 +10,7 @@ const DB_NAME = process.env.DB_NAME;
 const DB_URI = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_HOST}/${DB_NAME}?retryWrites=true&w=majority`;
 
 if (!DB_USER || !DB_PASS || !DB_HOST || !DB_NAME) {
-    throw new Error("❌ Missing MongoDB environment variables. Check .env file.");
+    throw new Error("Missing MongoDB environment variables. Check .env file.");
 }
 
 const connectDB = async () => {
