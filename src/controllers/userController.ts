@@ -25,7 +25,18 @@ const registerUser = async (req: Request, res: Response): Promise<void> => {
         const newUser = new User({ username, password: hashedPassword, status });
         await newUser.save();
 
-        res.status(201).json({ message: "User registered successfully" });
+        const token = jwt.sign(
+            { userId: newUser._id, username: newUser.username, status: newUser.status },
+            JWT_SECRET,
+            { expiresIn: "3h" }
+        );
+
+        res.status(201).json({
+            message: "User registered successfully",
+            token,
+            username: newUser.username,
+            status: newUser.status
+        });
     } catch (err) {
         res.status(500).json({ message: "Error registering user", error: err });
     }
@@ -48,7 +59,7 @@ const loginUser = async (req: Request, res: Response): Promise<void> => {
         }
 
         const token = jwt.sign({ userId: user._id, username: user.username, status: user.status }, JWT_SECRET, {
-            expiresIn: "1h",
+            expiresIn: "3h",
         });
 
         res.status(200).json({ token, username: user.username, status: user.status });
